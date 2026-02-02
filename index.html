@@ -19,6 +19,7 @@
             --text-muted: rgba(0, 0, 0, 0.35);
             --border: rgba(0, 0, 0, 0.08);
             --accent: #007AFF;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         html {
@@ -31,6 +32,7 @@
             color: var(--text);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         .container {
@@ -39,6 +41,23 @@
             padding: 0 40px;
         }
 
+        /* Animation Classes */
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.2s var(--ease-out-expo), transform 1.2s var(--ease-out-expo);
+        }
+
+        .reveal-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+
         /* Navigation */
         nav {
             position: fixed;
@@ -46,9 +65,15 @@
             left: 0;
             right: 0;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        nav.nav-hidden {
+            transform: translateY(-100%);
         }
 
         nav .container {
@@ -61,115 +86,171 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
             color: var(--text);
             font-size: 14px;
-            font-weight: 400;
+            font-weight: 500;
             letter-spacing: 0.5px;
+            opacity: 0;
+            animation: fadeIn 0.8s var(--ease-out-expo) forwards;
         }
 
         .logo img {
             width: 28px;
             height: 28px;
             border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .nav-links {
             display: flex;
             align-items: center;
             gap: 40px;
+            opacity: 0;
+            animation: fadeIn 0.8s var(--ease-out-expo) 0.2s forwards;
         }
 
         .nav-links a {
+            position: relative;
             color: var(--text-light);
             text-decoration: none;
             font-size: 12px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            transition: color 0.2s;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--text);
+            transition: width 0.3s var(--ease-out-expo);
         }
 
         .nav-links a:hover {
             color: var(--text);
         }
 
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
         /* Hero */
         .hero {
-            padding: 200px 0 120px;
+            padding: 220px 0 140px;
             text-align: center;
+            position: relative;
         }
 
         .hero-label {
+            display: inline-block;
             font-size: 11px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 40px;
+            color: var(--accent);
+            margin-bottom: 30px;
+            padding: 6px 12px;
+            background: rgba(0, 122, 255, 0.06);
+            border-radius: 100px;
         }
 
         h1 {
-            font-size: 56px;
+            font-size: 72px;
             font-weight: 300;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
             margin-bottom: 24px;
+            background: linear-gradient(180deg, #000 0%, #333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 16px;
+            font-size: 18px;
             color: var(--text-light);
             font-weight: 300;
-            max-width: 400px;
+            max-width: 480px;
             margin: 0 auto 60px;
-            line-height: 1.7;
+            line-height: 1.6;
         }
 
         .cta-group {
             display: flex;
             justify-content: center;
-            gap: 16px;
+            gap: 20px;
         }
 
         .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            font-size: 11px;
-            font-weight: 400;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            font-size: 12px;
+            font-weight: 500;
             letter-spacing: 1px;
             text-transform: uppercase;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.4s var(--ease-out-expo);
             cursor: pointer;
-            border: none;
+            border-radius: 100px;
+            overflow: hidden;
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: var(--text);
             color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         .btn-primary:hover {
-            background: #0066DD;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .btn-secondary {
-            background: transparent;
+            background: white;
             color: var(--text);
             border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
-            border-color: var(--text-light);
+            border-color: var(--text);
+            background: #FAFAFA;
         }
 
         /* Screenshot */
         .screenshot-section {
             padding: 0 0 160px;
+            perspective: 2000px;
+        }
+
+        .screenshot-container {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
         }
 
         .screenshot-wrapper {
-            border: 1px solid var(--border);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.15);
+            background: #fff;
+            transform: rotateX(5deg);
+            transition: transform 1.2s var(--ease-out-expo), box-shadow 1.2s var(--ease-out-expo);
+        }
+
+        .screenshot-wrapper.visible {
+            transform: rotateX(0deg);
+        }
+
+        .screenshot-wrapper:hover {
+            box-shadow: 0 60px 120px -30px rgba(0,0,0,0.2);
         }
 
         .screenshot-wrapper img {
@@ -179,7 +260,7 @@
 
         .screenshot-placeholder {
             aspect-ratio: 16/10;
-            background: #FAFAFA;
+            background: #fcfcfc;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -187,22 +268,24 @@
             font-size: 12px;
             letter-spacing: 1px;
             text-transform: uppercase;
+            background-image: radial-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
         /* Features */
         .features {
-            padding: 120px 0;
+            padding: 160px 0;
             border-top: 1px solid var(--border);
         }
 
         .features-header {
             text-align: center;
-            margin-bottom: 80px;
+            margin-bottom: 100px;
         }
 
         .features-header h2 {
             font-size: 11px;
-            font-weight: 400;
+            font-weight: 500;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--text-muted);
@@ -211,97 +294,139 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 60px 40px;
+            gap: 80px 40px;
         }
 
         .feature {
             text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s var(--ease-out-expo);
+        }
+
+        .feature.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.03);
+            font-size: 20px;
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .feature:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: rgba(0,122,255,0.1);
+            color: var(--accent);
         }
 
         .feature h3 {
-            font-size: 14px;
-            font-weight: 400;
+            font-size: 16px;
+            font-weight: 500;
             margin-bottom: 12px;
-            letter-spacing: 0.3px;
+            letter-spacing: -0.3px;
         }
 
         .feature p {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-light);
             font-weight: 300;
-            line-height: 1.7;
+            line-height: 1.6;
+            max-width: 260px;
+            margin: 0 auto;
         }
 
         /* Download */
         .download {
-            padding: 120px 0;
+            padding: 160px 0;
+            background: #FAFAFA;
             border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
 
         .download-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
         .download-header h2 {
-            font-size: 32px;
+            font-size: 42px;
             font-weight: 300;
-            margin-bottom: 16px;
-        }
-
-        .download-header p {
-            font-size: 14px;
-            color: var(--text-light);
-            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
         }
 
         .download-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            max-width: 700px;
+            gap: 24px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .download-btn {
-            display: block;
-            padding: 24px 20px;
-            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 16px;
             text-decoration: none;
             color: var(--text);
             text-align: center;
-            transition: all 0.2s;
+            transition: all 0.4s var(--ease-out-expo);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
         .download-btn:hover {
-            border-color: var(--accent);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        .os-icon {
+            font-size: 24px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .download-btn:hover .os-icon {
+            opacity: 1;
+            color: var(--accent);
         }
 
         .download-btn-label {
-            font-size: 12px;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            display: block;
-            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
         }
 
         .download-btn-size {
             font-size: 11px;
             color: var(--text-muted);
-        }
-
-        .download-note {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* Footer */
         footer {
-            padding: 40px 0;
-            border-top: 1px solid var(--border);
+            padding: 60px 0;
+            background: white;
         }
 
         footer .container {
@@ -311,64 +436,44 @@
         }
 
         footer p {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-muted);
-            letter-spacing: 0.3px;
         }
 
         .footer-links {
             display: flex;
-            gap: 30px;
+            gap: 40px;
         }
 
         .footer-links a {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-muted);
             text-decoration: none;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
+            transition: color 0.2s;
         }
 
         .footer-links a:hover {
             color: var(--text);
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Mobile */
         @media (max-width: 768px) {
-            .container {
-                padding: 0 24px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding: 140px 0 80px;
-            }
-
-            h1 {
-                font-size: 36px;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .download-grid {
-                grid-template-columns: 1fr;
-            }
-
-            footer .container {
-                flex-direction: column;
-                gap: 20px;
-            }
+            .container { padding: 0 24px; }
+            .nav-links { display: none; }
+            h1 { font-size: 42px; }
+            .features-grid { grid-template-columns: 1fr; gap: 60px; }
+            .download-grid { grid-template-columns: 1fr; }
+            footer .container { flex-direction: column; gap: 24px; }
         }
     </style>
 </head>
 <body>
-    <nav>
+    <nav id="navbar">
         <div class="container">
             <a href="/" class="logo">
                 <img src="icon.png" alt="Axiom">
@@ -384,19 +489,21 @@
 
     <section class="hero">
         <div class="container">
-            <p class="hero-label">Open Source</p>
-            <h1>Think in Structure</h1>
-            <p>A minimal mind mapping and task management app. Offline-first, blazing fast.</p>
-            <div class="cta-group">
-                <a href="#download" class="btn btn-primary">Download</a>
+            <div class="reveal-text">
+                <span class="hero-label">Open Source</span>
+            </div>
+            <h1 class="reveal-text delay-100">Think in Structure</h1>
+            <p class="reveal-text delay-200">A minimal mind mapping and task management app.<br>Offline-first, blazing fast, beautifully simple.</p>
+            <div class="cta-group reveal-text delay-300">
+                <a href="#download" class="btn btn-primary">Download Free</a>
                 <a href="https://github.com/guest12138/Axiom" class="btn btn-secondary" target="_blank">View Source</a>
             </div>
         </div>
     </section>
 
     <section class="screenshot-section">
-        <div class="container">
-            <div class="screenshot-wrapper">
+        <div class="container screenshot-container" id="tilt-container">
+            <div class="screenshot-wrapper reveal-text delay-400">
                 <div class="screenshot-placeholder">
                     App Screenshot
                 </div>
@@ -407,30 +514,36 @@
     <section class="features" id="features">
         <div class="container">
             <div class="features-header">
-                <h2>Features</h2>
+                <h2 class="reveal-on-scroll">Design & Performance</h2>
             </div>
             <div class="features-grid">
-                <div class="feature">
-                    <h3>Offline First</h3>
-                    <p>Your data stays on your device. Works perfectly without internet.</p>
-                </div>
-                <div class="feature">
+                <div class="feature reveal-on-scroll">
+                    <div class="feature-icon">⚡</div>
                     <h3>Blazing Fast</h3>
                     <p>Native performance with smooth 60fps interactions.</p>
                 </div>
-                <div class="feature">
+                <div class="feature reveal-on-scroll delay-100">
+                    <div class="feature-icon">📴</div>
+                    <h3>Offline First</h3>
+                    <p>Your data stays on your device. Works perfectly without internet.</p>
+                </div>
+                <div class="feature reveal-on-scroll delay-200">
+                    <div class="feature-icon">🎯</div>
                     <h3>Mind Map + Tasks</h3>
                     <p>Visualize ideas as mind maps, convert to actionable tasks.</p>
                 </div>
-                <div class="feature">
+                <div class="feature reveal-on-scroll">
+                    <div class="feature-icon">🌍</div>
                     <h3>Cross Platform</h3>
                     <p>Available on macOS, Windows, and Linux.</p>
                 </div>
-                <div class="feature">
+                <div class="feature reveal-on-scroll delay-100">
+                    <div class="feature-icon">🔓</div>
                     <h3>Open Source</h3>
                     <p>Fully open source under MIT license.</p>
                 </div>
-                <div class="feature">
+                <div class="feature reveal-on-scroll delay-200">
+                    <div class="feature-icon">🎨</div>
                     <h3>Minimal Design</h3>
                     <p>Clean, distraction-free interface.</p>
                 </div>
@@ -441,24 +554,26 @@
     <section class="download" id="download">
         <div class="container">
             <div class="download-header">
-                <h2>Download</h2>
-                <p>Free and open source. No account required.</p>
+                <h2 class="reveal-on-scroll">Start Thinking Clearly</h2>
+                <p class="reveal-on-scroll delay-100">Free forever. No account required.</p>
             </div>
             <div class="download-grid">
-                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom-1.0.17-arm64.dmg" class="download-btn">
+                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom-1.0.17-arm64.dmg" class="download-btn reveal-on-scroll">
+                    <div class="os-icon"></div>
                     <span class="download-btn-label">macOS</span>
                     <span class="download-btn-size">Apple Silicon</span>
                 </a>
-                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom.Setup.1.0.17.exe" class="download-btn">
+                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom.Setup.1.0.17.exe" class="download-btn reveal-on-scroll delay-100">
+                    <div class="os-icon">❖</div>
                     <span class="download-btn-label">Windows</span>
                     <span class="download-btn-size">64-bit</span>
                 </a>
-                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom-1.0.17-arm64.AppImage" class="download-btn">
+                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom-1.0.17-arm64.AppImage" class="download-btn reveal-on-scroll delay-200">
+                    <div class="os-icon">🐧</div>
                     <span class="download-btn-label">Linux</span>
                     <span class="download-btn-size">AppImage</span>
                 </a>
             </div>
-            <p class="download-note">macOS users: Right-click and select "Open" on first launch.</p>
         </div>
     </section>
 
@@ -471,5 +586,64 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Reveal animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-text, .reveal-on-scroll, .screenshot-wrapper').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 3D Tilt Effect for Screenshot
+        const container = document.getElementById('tilt-container');
+        const wrapper = container.querySelector('.screenshot-wrapper');
+        
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const xPct = x / rect.width;
+            const yPct = y / rect.height;
+            
+            const rotateX = (0.5 - yPct) * 10;
+            const rotateY = (xPct - 0.5) * 10;
+            
+            wrapper.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            wrapper.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+
+        // Smart Navbar
+        let lastScroll = 0;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                navbar.classList.add('nav-hidden');
+            } else {
+                navbar.classList.remove('nav-hidden');
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
 </body>
 </html>
