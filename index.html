@@ -381,26 +381,26 @@
             /* 去掉蓝色边框，保持普通白色节点样式 */
         }
 
-        /* 高亮效果：悬浮时背后图层所有节点默认虚化 */
-        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node {
+        /* 高亮效果：悬浮时所有图层的所有节点默认虚化 */
+        .perspective-container.highlight-mode .demo-node {
             opacity: 0.15;
             filter: blur(2px);
             transition: opacity 0.3s ease, filter 0.3s ease;
         }
 
-        /* 背后图层随机高亮的白点（不是蓝点） */
+        /* 背后图层随机高亮的白点 */
         .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node.random-highlight {
             opacity: 1 !important;
             filter: none !important;
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(0, 0, 0, 0.3) !important;
         }
 
-        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .folder-connections-svg {
+        .perspective-container.highlight-mode .folder-connections-svg {
             opacity: 0.12;
             transition: opacity 0.3s ease;
         }
 
-        /* 当前悬浮的节点高亮 */
+        /* 当前悬浮的节点高亮（最高优先级） */
         .demo-node.highlighted {
             opacity: 1 !important;
             filter: none !important;
