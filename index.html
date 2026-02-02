@@ -381,36 +381,31 @@
             /* 去掉蓝色边框，保持普通白色节点样式 */
         }
 
-        /* 高亮模式（Highlight Mode）样式控制 */
-        
-        /* 1. 背景图层的连接线：总是虚化 */
+        /* 高亮效果：悬浮时背后图层所有节点默认虚化 */
+        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node {
+            opacity: 0.15;
+            filter: blur(2px);
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        /* 背后图层随机高亮的白点（不是蓝点） */
+        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node.random-highlight {
+            opacity: 1 !important;
+            filter: none !important;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+        }
+
         .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .folder-connections-svg {
-            opacity: 0.1;
+            opacity: 0.12;
             transition: opacity 0.3s ease;
         }
 
-        /* 2. 背景图层的蓝色中心节点 (.center)：虚化（不要高亮蓝点） */
-        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node.center {
-            opacity: 0.1 !important;
-            filter: blur(2px) !important;
-            transition: opacity 0.3s ease, filter 0.3s ease;
-        }
-
-        /* 3. 背景图层的白色节点 (普通节点)：保持清晰/高亮 */
-        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node:not(.center) {
-            opacity: 1 !important; /* 相对于图层不透明，保持最大可见度 */
-            filter: none !important;
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2); /* 微弱的边框高亮 */
-            transition: opacity 0.3s ease, filter 0.3s ease;
-        }
-
-        /* 4. 当前被鼠标悬浮的节点：最强高亮 */
+        /* 当前悬浮的节点高亮 */
         .demo-node.highlighted {
             opacity: 1 !important;
             filter: none !important;
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 6px 24px rgba(0, 0, 0, 0.4) !important;
-            z-index: 100;
-            transform: translate(-50%, -50%) scale(1.05);
+            z-index: 10;
         }
 
         /* 悬浮效果 */
@@ -914,18 +909,18 @@
                             </div>
                         </div>
 
-                        <!-- Layer 2 - Project Ideas - 右下偏向（更靠右） -->
+                        <!-- Layer 2 - Project Ideas - 更靠右 -->
                         <div class="perspective-folder-layer" data-index="2">
                             <div class="folder-canvas-area">
                                 <svg class="folder-connections-svg"></svg>
                                 <div class="folder-nodes-container">
-                                    <div class="demo-node center" data-id="2-root" style="top: 65%; left: 35%;">Ideas</div>
-                                    <div class="demo-node" data-id="2-1" data-parent="2-root" style="top: 45%; left: 58%;">Research</div>
-                                    <div class="demo-node" data-id="2-2" data-parent="2-root" style="top: 80%; left: 56%;">Brainstorm</div>
-                                    <div class="demo-node" data-id="2-1-1" data-parent="2-1" style="top: 35%; left: 80%;">Market</div>
-                                    <div class="demo-node" data-id="2-1-2" data-parent="2-1" style="top: 52%; left: 83%;">Trends</div>
-                                    <div class="demo-node" data-id="2-2-1" data-parent="2-2" style="top: 72%; left: 78%;">Features</div>
-                                    <div class="demo-node" data-id="2-2-2" data-parent="2-2" style="top: 88%; left: 81%;">MVP</div>
+                                    <div class="demo-node center" data-id="2-root" style="top: 62%; left: 38%;">Ideas</div>
+                                    <div class="demo-node" data-id="2-1" data-parent="2-root" style="top: 42%; left: 60%;">Research</div>
+                                    <div class="demo-node" data-id="2-2" data-parent="2-root" style="top: 78%; left: 58%;">Brainstorm</div>
+                                    <div class="demo-node" data-id="2-1-1" data-parent="2-1" style="top: 32%; left: 82%;">Market</div>
+                                    <div class="demo-node" data-id="2-1-2" data-parent="2-1" style="top: 50%; left: 85%;">Trends</div>
+                                    <div class="demo-node" data-id="2-2-1" data-parent="2-2" style="top: 70%; left: 80%;">Features</div>
+                                    <div class="demo-node" data-id="2-2-2" data-parent="2-2" style="top: 86%; left: 83%;">MVP</div>
                                 </div>
                             </div>
                         </div>
@@ -1291,8 +1286,24 @@
             });
         });
 
-        // 节点悬浮高亮效果 - 逐字还原自程序 perspective-highlight-mode
+        // 节点悬浮高亮效果 - 随机高亮背后图层的白点
         const allDemoNodes = perspectiveContainer.querySelectorAll('.demo-node');
+        
+        // 获取背后图层的白点（非 center 节点）
+        function getBackgroundWhiteNodes() {
+            const bgLayers = perspectiveContainer.querySelectorAll('.perspective-folder-layer:not(.focused)');
+            const whiteNodes = [];
+            bgLayers.forEach(layer => {
+                layer.querySelectorAll('.demo-node:not(.center)').forEach(n => whiteNodes.push(n));
+            });
+            return whiteNodes;
+        }
+        
+        // 随机选择 N 个节点
+        function pickRandomNodes(nodes, count) {
+            const shuffled = [...nodes].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, Math.min(count, nodes.length));
+        }
         
         allDemoNodes.forEach(node => {
             node.addEventListener('mouseenter', () => {
@@ -1300,6 +1311,12 @@
                 perspectiveContainer.classList.add('highlight-mode');
                 // 高亮当前节点
                 node.classList.add('highlighted');
+                
+                // 随机高亮背后图层的 3-5 个白点
+                const whiteNodes = getBackgroundWhiteNodes();
+                const randomCount = 3 + Math.floor(Math.random() * 3); // 3-5 个
+                const randomNodes = pickRandomNodes(whiteNodes, randomCount);
+                randomNodes.forEach(n => n.classList.add('random-highlight'));
             });
             
             node.addEventListener('mouseleave', () => {
@@ -1307,6 +1324,11 @@
                 perspectiveContainer.classList.remove('highlight-mode');
                 // 移除高亮
                 node.classList.remove('highlighted');
+                
+                // 移除所有随机高亮
+                perspectiveContainer.querySelectorAll('.random-highlight').forEach(n => {
+                    n.classList.remove('random-highlight');
+                });
             });
         });
 
