@@ -1150,13 +1150,18 @@
                 const nodesContainer = layer.querySelector('.folder-nodes-container');
                 const allNodes = nodesContainer.querySelectorAll('.demo-node');
                 
-                if (!svg) return;
+                if (!svg || !nodesContainer) return;
                 
                 // 清空现有连线
                 svg.innerHTML = '';
                 
-                // 获取容器尺寸
+                // 获取容器尺寸（用于百分比转像素）
                 const containerRect = nodesContainer.getBoundingClientRect();
+                const containerWidth = containerRect.width;
+                const containerHeight = containerRect.height;
+                
+                // 设置 SVG viewBox 匹配容器尺寸
+                svg.setAttribute('viewBox', `0 0 ${containerWidth} ${containerHeight}`);
                 
                 // 为每个有 data-parent 的节点绘制到父节点的连线
                 allNodes.forEach(node => {
@@ -1166,27 +1171,33 @@
                     const parentNode = nodesContainer.querySelector(`[data-id="${parentId}"]`);
                     if (!parentNode) return;
                     
-                    // 获取节点位置（百分比）
-                    const parentTop = parseFloat(parentNode.style.top);
-                    const parentLeft = parseFloat(parentNode.style.left);
-                    const childTop = parseFloat(node.style.top);
-                    const childLeft = parseFloat(node.style.left);
+                    // 获取节点位置（百分比转像素）
+                    const parentTopPercent = parseFloat(parentNode.style.top);
+                    const parentLeftPercent = parseFloat(parentNode.style.left);
+                    const childTopPercent = parseFloat(node.style.top);
+                    const childLeftPercent = parseFloat(node.style.left);
                     
-                    // 计算节点实际宽度（估算）
-                    const nodeWidthPercent = 8; // 节点宽度约占容器 8%
+                    // 转换为像素坐标
+                    const parentX = (parentLeftPercent / 100) * containerWidth;
+                    const parentY = (parentTopPercent / 100) * containerHeight;
+                    const childX = (childLeftPercent / 100) * containerWidth;
+                    const childY = (childTopPercent / 100) * containerHeight;
+                    
+                    // 估算节点宽度（约 80px）
+                    const nodeHalfWidth = 40;
                     
                     // 连接点：父节点右侧中心 → 子节点左侧中心
-                    const startX = parentLeft + nodeWidthPercent / 2;
-                    const startY = parentTop;
-                    const endX = childLeft - nodeWidthPercent / 2;
-                    const endY = childTop;
+                    const startX = parentX + nodeHalfWidth;
+                    const startY = parentY;
+                    const endX = childX - nodeHalfWidth;
+                    const endY = childY;
                     
                     // 贝塞尔曲线控制点（水平延伸后垂直过渡）
                     const midX = (startX + endX) / 2;
                     
                     // 创建贝塞尔曲线路径
                     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                    const d = `M ${startX}% ${startY}% C ${midX}% ${startY}%, ${midX}% ${endY}%, ${endX}% ${endY}%`;
+                    const d = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
                     path.setAttribute('d', d);
                     path.setAttribute('fill', 'none');
                     path.setAttribute('stroke', 'rgba(255, 255, 255, 0.25)');
@@ -1196,8 +1207,8 @@
             });
         }
 
-        // 初始绘制连接线
-        drawConnections();
+        // 初始绘制连接线（延迟以确保 DOM 渲染完成）
+        setTimeout(drawConnections, 100);
         
         // 窗口大小变化时重绘
         window.addEventListener('resize', drawConnections);
