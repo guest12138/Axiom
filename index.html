@@ -275,7 +275,7 @@
 
         /* Perspective Stack Section */
         .perspective-section {
-            height: 300vh; /* 3 screens for 3 layers */
+            height: 320vh; /* 3 screens + breathing room */
             position: relative;
         }
 
@@ -286,17 +286,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            perspective: 1200px;
+            perspective: 900px;
             overflow: hidden;
         }
 
         .perspective-stack {
             position: relative;
-            width: 85%;
-            max-width: 900px;
-            height: 70vh;
-            max-height: 550px;
+            width: 88%;
+            max-width: 920px;
+            height: 72vh;
+            max-height: 560px;
             transform-style: preserve-3d;
+            transform: rotateX(7deg);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .perspective-sticky:hover .perspective-stack {
+            transform: rotateX(5deg);
         }
 
         .perspective-layer {
@@ -305,30 +311,30 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* Enhanced Glassmorphism */
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            /* Glassmorphism to see behind layers */
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border: 1px solid rgba(0,0,0,0.06);
             overflow: hidden;
-            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             transform-origin: center bottom;
             backface-visibility: hidden;
         }
 
         /* Default state - all stacked behind */
         .perspective-layer[data-state="behind"] {
-            transform: translateY(-60px) translateZ(-120px) scale(0.92);
-            opacity: 0.8;
-            filter: blur(1px) brightness(0.98);
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+            transform: translateY(-70px) translateZ(-160px) scale(0.92);
+            opacity: 0.75;
+            filter: blur(0.5px) brightness(0.99);
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.04);
         }
 
         .perspective-layer[data-state="behind-2"] {
-            transform: translateY(-110px) translateZ(-240px) scale(0.84);
-            opacity: 0.6;
-            filter: blur(2px) brightness(0.96);
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+            transform: translateY(-140px) translateZ(-320px) scale(0.84);
+            opacity: 0.55;
+            filter: blur(1.2px) brightness(0.97);
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.03);
         }
 
         /* Focused layer */
@@ -336,14 +342,14 @@
             transform: translateY(0) translateZ(0) scale(1);
             opacity: 1;
             z-index: 10;
-            box-shadow: 
+            box-shadow:
                 0 30px 100px rgba(0,0,0,0.12),
-                0 0 0 1px rgba(0,0,0,0.02); /* Subtle border */
+                0 0 0 1px rgba(0,0,0,0.02);
         }
 
         /* Already viewed - slide up and fade out */
         .perspective-layer[data-state="passed"] {
-            transform: translateY(-120%) translateZ(50px) scale(1);
+            transform: translateY(-140%) translateZ(80px) scale(1.02);
             opacity: 0;
             pointer-events: none;
         }
