@@ -830,56 +830,97 @@
             <div class="perspective-container" id="perspective-container">
                 <div class="perspective-stage">
                     <div class="perspective-stack">
-                        <!-- Layer 0 - Product Launch (左上区域) -->
+                        <!-- Layer 0 - Product Launch (左到右树形布局) -->
                         <div class="perspective-folder-layer" data-index="0">
                             <div class="folder-canvas-area">
                                 <svg class="folder-connections-svg"></svg>
                                 <div class="folder-nodes-container">
-                                    <div class="demo-node center" data-id="0-root" style="top: 42%; left: 10%;">Launch</div>
-                                    <div class="demo-node" data-id="0-1" data-parent="0-root" style="top: 25%; left: 28%;">Design</div>
-                                    <div class="demo-node" data-id="0-2" data-parent="0-root" style="top: 58%; left: 28%;">Development</div>
-                                    <div class="demo-node accent" data-id="0-1-1" data-parent="0-1" style="top: 15%; left: 48%;">UI/UX</div>
-                                    <div class="demo-node" data-id="0-1-2" data-parent="0-1" style="top: 35%; left: 48%;">Frontend</div>
-                                    <div class="demo-node accent" data-id="0-2-1" data-parent="0-2" style="top: 50%; left: 48%;">Backend</div>
-                                    <div class="demo-node" data-id="0-2-2" data-parent="0-2" style="top: 68%; left: 48%;">Testing</div>
-                                    <div class="demo-node" data-id="0-1-1-1" data-parent="0-1-1" style="top: 10%; left: 68%;">Colors</div>
-                                    <div class="demo-node" data-id="0-1-1-2" data-parent="0-1-1" style="top: 22%; left: 68%;">Layout</div>
-                                    <div class="demo-node" data-id="0-2-1-1" data-parent="0-2-1" style="top: 45%; left: 68%;">API</div>
-                                    <div class="demo-node" data-id="0-2-1-2" data-parent="0-2-1" style="top: 58%; left: 68%;">Database</div>
+                                    <!-- 根节点 -->
+                                    <div class="demo-node center" data-id="0-root" style="top: 50%; left: 8%;">Launch</div>
+                                    <!-- 第一层 -->
+                                    <div class="demo-node" data-id="0-1" data-parent="0-root" style="top: 20%; left: 24%;">Design</div>
+                                    <div class="demo-node" data-id="0-2" data-parent="0-root" style="top: 50%; left: 24%;">Development</div>
+                                    <div class="demo-node" data-id="0-3" data-parent="0-root" style="top: 80%; left: 24%;">Marketing</div>
+                                    <!-- 第二层 -->
+                                    <div class="demo-node accent" data-id="0-1-1" data-parent="0-1" style="top: 12%; left: 42%;">UI/UX</div>
+                                    <div class="demo-node" data-id="0-1-2" data-parent="0-1" style="top: 28%; left: 42%;">Brand</div>
+                                    <div class="demo-node" data-id="0-2-1" data-parent="0-2" style="top: 40%; left: 42%;">Frontend</div>
+                                    <div class="demo-node accent" data-id="0-2-2" data-parent="0-2" style="top: 52%; left: 42%;">Backend</div>
+                                    <div class="demo-node" data-id="0-2-3" data-parent="0-2" style="top: 64%; left: 42%;">Testing</div>
+                                    <div class="demo-node" data-id="0-3-1" data-parent="0-3" style="top: 76%; left: 42%;">Social</div>
+                                    <div class="demo-node" data-id="0-3-2" data-parent="0-3" style="top: 88%; left: 42%;">Content</div>
+                                    <!-- 第三层 -->
+                                    <div class="demo-node" data-id="0-1-1-1" data-parent="0-1-1" style="top: 8%; left: 60%;">Colors</div>
+                                    <div class="demo-node" data-id="0-1-1-2" data-parent="0-1-1" style="top: 18%; left: 60%;">Layout</div>
+                                    <div class="demo-node" data-id="0-2-1-1" data-parent="0-2-1" style="top: 35%; left: 60%;">React</div>
+                                    <div class="demo-node" data-id="0-2-1-2" data-parent="0-2-1" style="top: 45%; left: 60%;">CSS</div>
+                                    <div class="demo-node" data-id="0-2-2-1" data-parent="0-2-2" style="top: 55%; left: 60%;">API</div>
+                                    <div class="demo-node" data-id="0-2-2-2" data-parent="0-2-2" style="top: 65%; left: 60%;">Database</div>
+                                    <!-- 第四层 -->
+                                    <div class="demo-node" data-id="0-2-2-1-1" data-parent="0-2-2-1" style="top: 50%; left: 78%;">REST</div>
+                                    <div class="demo-node accent" data-id="0-2-2-1-2" data-parent="0-2-2-1" style="top: 60%; left: 78%;">GraphQL</div>
+                                    <div class="demo-node" data-id="0-2-2-2-1" data-parent="0-2-2-2" style="top: 70%; left: 78%;">PostgreSQL</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Layer 1 - Weekly Planning (右下区域，错开) -->
+                        <!-- Layer 1 - Weekly Planning -->
                         <div class="perspective-folder-layer" data-index="1">
                             <div class="folder-canvas-area">
                                 <svg class="folder-connections-svg"></svg>
                                 <div class="folder-nodes-container">
-                                    <div class="demo-node center" data-id="1-root" style="top: 55%; left: 18%;">This Week</div>
-                                    <div class="demo-node" data-id="1-1" data-parent="1-root" style="top: 32%; left: 42%;">Monday</div>
-                                    <div class="demo-node accent" data-id="1-2" data-parent="1-root" style="top: 55%; left: 42%;">Priority</div>
-                                    <div class="demo-node" data-id="1-3" data-parent="1-root" style="top: 78%; left: 42%;">Review</div>
-                                    <div class="demo-node" data-id="1-1-1" data-parent="1-1" style="top: 25%; left: 65%;">Tasks</div>
-                                    <div class="demo-node" data-id="1-1-2" data-parent="1-1" style="top: 40%; left: 65%;">Meetings</div>
-                                    <div class="demo-node accent" data-id="1-2-1" data-parent="1-2" style="top: 55%; left: 65%;">Urgent</div>
-                                    <div class="demo-node" data-id="1-3-1" data-parent="1-3" style="top: 72%; left: 65%;">Complete</div>
-                                    <div class="demo-node" data-id="1-3-2" data-parent="1-3" style="top: 85%; left: 65%;">Pending</div>
+                                    <div class="demo-node center" data-id="1-root" style="top: 50%; left: 10%;">This Week</div>
+                                    <!-- 第一层 -->
+                                    <div class="demo-node" data-id="1-1" data-parent="1-root" style="top: 18%; left: 28%;">Monday</div>
+                                    <div class="demo-node" data-id="1-2" data-parent="1-root" style="top: 38%; left: 28%;">Tuesday</div>
+                                    <div class="demo-node accent" data-id="1-3" data-parent="1-root" style="top: 58%; left: 28%;">Wednesday</div>
+                                    <div class="demo-node" data-id="1-4" data-parent="1-root" style="top: 78%; left: 28%;">Friday</div>
+                                    <!-- 第二层 -->
+                                    <div class="demo-node" data-id="1-1-1" data-parent="1-1" style="top: 10%; left: 48%;">Standup</div>
+                                    <div class="demo-node" data-id="1-1-2" data-parent="1-1" style="top: 22%; left: 48%;">Code Review</div>
+                                    <div class="demo-node" data-id="1-2-1" data-parent="1-2" style="top: 32%; left: 48%;">Sprint</div>
+                                    <div class="demo-node accent" data-id="1-2-2" data-parent="1-2" style="top: 42%; left: 48%;">Retro</div>
+                                    <div class="demo-node" data-id="1-3-1" data-parent="1-3" style="top: 52%; left: 48%;">Design</div>
+                                    <div class="demo-node" data-id="1-3-2" data-parent="1-3" style="top: 62%; left: 48%;">Testing</div>
+                                    <div class="demo-node" data-id="1-4-1" data-parent="1-4" style="top: 72%; left: 48%;">Deploy</div>
+                                    <div class="demo-node" data-id="1-4-2" data-parent="1-4" style="top: 84%; left: 48%;">Review</div>
+                                    <!-- 第三层 -->
+                                    <div class="demo-node" data-id="1-1-1-1" data-parent="1-1-1" style="top: 6%; left: 68%;">Team A</div>
+                                    <div class="demo-node" data-id="1-1-1-2" data-parent="1-1-1" style="top: 15%; left: 68%;">Team B</div>
+                                    <div class="demo-node accent" data-id="1-3-1-1" data-parent="1-3-1" style="top: 48%; left: 68%;">Wireframe</div>
+                                    <div class="demo-node" data-id="1-3-1-2" data-parent="1-3-1" style="top: 58%; left: 68%;">Prototype</div>
+                                    <div class="demo-node" data-id="1-4-1-1" data-parent="1-4-1" style="top: 68%; left: 68%;">Staging</div>
+                                    <div class="demo-node" data-id="1-4-1-2" data-parent="1-4-1" style="top: 78%; left: 68%;">Production</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Layer 2 - Project Ideas (中上区域，再错开) -->
+                        <!-- Layer 2 - Project Ideas -->
                         <div class="perspective-folder-layer" data-index="2">
                             <div class="folder-canvas-area">
                                 <svg class="folder-connections-svg"></svg>
                                 <div class="folder-nodes-container">
-                                    <div class="demo-node center" data-id="2-root" style="top: 45%; left: 22%;">Ideas</div>
-                                    <div class="demo-node" data-id="2-1" data-parent="2-root" style="top: 28%; left: 48%;">Research</div>
-                                    <div class="demo-node accent" data-id="2-2" data-parent="2-root" style="top: 62%; left: 48%;">Brainstorm</div>
-                                    <div class="demo-node" data-id="2-1-1" data-parent="2-1" style="top: 18%; left: 72%;">Market</div>
-                                    <div class="demo-node" data-id="2-1-2" data-parent="2-1" style="top: 35%; left: 72%;">Trends</div>
-                                    <div class="demo-node" data-id="2-2-1" data-parent="2-2" style="top: 55%; left: 72%;">Features</div>
-                                    <div class="demo-node" data-id="2-2-2" data-parent="2-2" style="top: 70%; left: 72%;">MVP</div>
+                                    <div class="demo-node center" data-id="2-root" style="top: 50%; left: 10%;">Ideas</div>
+                                    <!-- 第一层 -->
+                                    <div class="demo-node" data-id="2-1" data-parent="2-root" style="top: 22%; left: 28%;">Research</div>
+                                    <div class="demo-node accent" data-id="2-2" data-parent="2-root" style="top: 50%; left: 28%;">Brainstorm</div>
+                                    <div class="demo-node" data-id="2-3" data-parent="2-root" style="top: 78%; left: 28%;">Validate</div>
+                                    <!-- 第二层 -->
+                                    <div class="demo-node" data-id="2-1-1" data-parent="2-1" style="top: 12%; left: 48%;">Market</div>
+                                    <div class="demo-node" data-id="2-1-2" data-parent="2-1" style="top: 24%; left: 48%;">Trends</div>
+                                    <div class="demo-node" data-id="2-1-3" data-parent="2-1" style="top: 36%; left: 48%;">Competition</div>
+                                    <div class="demo-node accent" data-id="2-2-1" data-parent="2-2" style="top: 46%; left: 48%;">Features</div>
+                                    <div class="demo-node" data-id="2-2-2" data-parent="2-2" style="top: 56%; left: 48%;">MVP</div>
+                                    <div class="demo-node" data-id="2-3-1" data-parent="2-3" style="top: 68%; left: 48%;">Survey</div>
+                                    <div class="demo-node" data-id="2-3-2" data-parent="2-3" style="top: 80%; left: 48%;">Prototype</div>
+                                    <div class="demo-node" data-id="2-3-3" data-parent="2-3" style="top: 92%; left: 48%;">Beta</div>
+                                    <!-- 第三层 -->
+                                    <div class="demo-node" data-id="2-1-1-1" data-parent="2-1-1" style="top: 8%; left: 68%;">Size</div>
+                                    <div class="demo-node" data-id="2-1-1-2" data-parent="2-1-1" style="top: 18%; left: 68%;">Growth</div>
+                                    <div class="demo-node accent" data-id="2-2-1-1" data-parent="2-2-1" style="top: 42%; left: 68%;">Core</div>
+                                    <div class="demo-node" data-id="2-2-1-2" data-parent="2-2-1" style="top: 52%; left: 68%;">Premium</div>
+                                    <div class="demo-node" data-id="2-3-1-1" data-parent="2-3-1" style="top: 64%; left: 68%;">Users</div>
+                                    <div class="demo-node" data-id="2-3-1-2" data-parent="2-3-1" style="top: 74%; left: 68%;">Feedback</div>
                                 </div>
                             </div>
                         </div>
