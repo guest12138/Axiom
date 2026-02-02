@@ -372,14 +372,44 @@
         }
 
         .demo-node.center {
-            background: #1a1a1a;
+            background: #007AFF;
             color: white;
             font-weight: 500;
         }
 
         .demo-node.accent {
-            border: 1px solid var(--accent);
-            color: var(--accent);
+            /* 去掉蓝色边框，保持普通白色节点样式 */
+        }
+
+        /* 高亮效果：悬浮时其他图层虚化 */
+        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node {
+            opacity: 0.15;
+            filter: blur(2px);
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .folder-connections-svg {
+            opacity: 0.1;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 高亮的节点保持清晰 */
+        .demo-node.highlighted {
+            opacity: 1 !important;
+            filter: none !important;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+            z-index: 10;
+        }
+
+        /* 悬浮效果 */
+        .demo-node {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease, filter 0.3s ease;
+            cursor: pointer;
+        }
+
+        .demo-node:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         }
 
         /* 透视模式下的连接线 */
@@ -1246,6 +1276,25 @@
             indicator.addEventListener('click', () => {
                 perspectiveFocusIndex = index;
                 updatePerspectiveLayerStyles();
+            });
+        });
+
+        // 节点悬浮高亮效果 - 逐字还原自程序 perspective-highlight-mode
+        const allDemoNodes = perspectiveContainer.querySelectorAll('.demo-node');
+        
+        allDemoNodes.forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                // 启用高亮模式
+                perspectiveContainer.classList.add('highlight-mode');
+                // 高亮当前节点
+                node.classList.add('highlighted');
+            });
+            
+            node.addEventListener('mouseleave', () => {
+                // 关闭高亮模式
+                perspectiveContainer.classList.remove('highlight-mode');
+                // 移除高亮
+                node.classList.remove('highlighted');
             });
         });
 
