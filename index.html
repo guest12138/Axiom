@@ -305,45 +305,42 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* 半透明玻璃质感 - 关键！这样能看到后面的图层 */
+            /* Glassmorphism to see behind layers */
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(0,0,0,0.08);
             overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-origin: center center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center bottom;
+            backface-visibility: hidden;
         }
 
-        /* Behind layer 1 - visible behind focus */
+        /* Default state - all stacked behind */
         .perspective-layer[data-state="behind"] {
-            transform: translateY(-45px) scale(0.96);
-            opacity: 0.85;
-            z-index: 2;
+            transform: translateY(-50px) translateZ(-100px) scale(0.94);
+            opacity: 0.6;
+            filter: brightness(0.98);
         }
 
-        /* Behind layer 2 - further back */
         .perspective-layer[data-state="behind-2"] {
-            transform: translateY(-85px) scale(0.92);
-            opacity: 0.7;
-            z-index: 1;
+            transform: translateY(-90px) translateZ(-200px) scale(0.88);
+            opacity: 0.4;
+            filter: brightness(0.96);
         }
 
-        /* Focused layer - front */
+        /* Focused layer */
         .perspective-layer[data-state="focus"] {
-            transform: translateY(0) scale(1);
+            transform: translateY(0) translateZ(0) scale(1);
             opacity: 1;
             z-index: 10;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.12);
         }
 
-        /* Already viewed - slide up and out */
+        /* Already viewed - slide up and fade out */
         .perspective-layer[data-state="passed"] {
-            transform: translateY(-150%) scale(1);
+            transform: translateY(-120%) translateZ(50px) scale(1);
             opacity: 0;
-            z-index: 20;
             pointer-events: none;
         }
 
