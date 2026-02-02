@@ -273,56 +273,178 @@
             transform: translateY(-2px);
         }
 
-        /* Screenshot */
-        .screenshot-section {
+        /* Perspective Stack Section */
+        .perspective-section {
             padding: 0 0 160px;
+            perspective: 1500px;
         }
 
-        .screenshot-wrapper {
-            border: 1px solid var(--border);
-            overflow: hidden;
+        .perspective-stack {
             position: relative;
+            height: 500px;
+            max-width: 800px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
             opacity: 0;
-            transform: translateY(60px) scale(0.95);
+            transform: translateY(60px);
             transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .screenshot-wrapper.visible {
+        .perspective-stack.visible {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
 
-        .screenshot-wrapper::after {
-            content: '';
+        .perspective-layer {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, transparent 80%, rgba(255,255,255,0.8) 100%);
-            pointer-events: none;
-        }
-
-        .screenshot-wrapper img {
             width: 100%;
-            display: block;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 100%;
+            background: #FAFAFA;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
         }
 
-        .screenshot-wrapper:hover img {
-            transform: scale(1.02);
+        /* Layer 3 - Furthest back */
+        .perspective-layer:nth-child(1) {
+            transform: translateY(-60px) scale(0.92);
+            opacity: 0.5;
+            z-index: 1;
         }
 
-        .screenshot-placeholder {
-            aspect-ratio: 16/10;
-            background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
+        /* Layer 2 - Middle */
+        .perspective-layer:nth-child(2) {
+            transform: translateY(-30px) scale(0.96);
+            opacity: 0.75;
+            z-index: 2;
+        }
+
+        /* Layer 1 - Front (focused) */
+        .perspective-layer:nth-child(3) {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            z-index: 3;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        /* Hover effect - fan out */
+        .perspective-stack:hover .perspective-layer:nth-child(1) {
+            transform: translateY(-80px) translateX(-20px) scale(0.88) rotateZ(-1deg);
+        }
+
+        .perspective-stack:hover .perspective-layer:nth-child(2) {
+            transform: translateY(-40px) translateX(-10px) scale(0.94) rotateZ(-0.5deg);
+        }
+
+        .perspective-stack:hover .perspective-layer:nth-child(3) {
+            transform: translateY(0) scale(1);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.12);
+        }
+
+        /* Layer content */
+        .layer-content {
+            width: 100%;
+            height: 100%;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fake window header */
+        .layer-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .window-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #E0E0E0;
+        }
+
+        .window-dot.red { background: #FF5F57; }
+        .window-dot.yellow { background: #FFBD2E; }
+        .window-dot.green { background: #28CA41; }
+
+        .layer-title {
+            margin-left: 12px;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+
+        /* Mind map visualization */
+        .mindmap-viz {
+            flex: 1;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
+        }
+
+        .node {
+            position: absolute;
+            background: white;
+            border: 1px solid var(--border);
+            padding: 10px 16px;
             font-size: 12px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            color: var(--text);
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .node.center {
+            background: var(--text);
+            color: white;
+            border-color: var(--text);
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        .node.accent {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Connection lines */
+        .connection {
+            position: absolute;
+            height: 1px;
+            background: var(--border);
+            transform-origin: left center;
+        }
+
+        /* Layer indicator dots */
+        .layer-indicators {
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .layer-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .layer-dot.active {
+            background: var(--text);
+            transform: scale(1.3);
         }
 
         /* Features */
@@ -674,11 +796,72 @@
         </div>
     </section>
 
-    <section class="screenshot-section">
+    <section class="perspective-section">
         <div class="container">
-            <div class="screenshot-wrapper">
-                <div class="screenshot-placeholder">
-                    App Screenshot
+            <div class="perspective-stack">
+                <!-- Layer 3 - Back -->
+                <div class="perspective-layer">
+                    <div class="layer-content">
+                        <div class="layer-header">
+                            <span class="window-dot red"></span>
+                            <span class="window-dot yellow"></span>
+                            <span class="window-dot green"></span>
+                            <span class="layer-title">Project Ideas</span>
+                        </div>
+                        <div class="mindmap-viz">
+                            <div class="node" style="top: 30%; left: 20%;">Research</div>
+                            <div class="node center" style="top: 40%; left: 45%;">Ideas</div>
+                            <div class="node" style="top: 50%; left: 70%;">Explore</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layer 2 - Middle -->
+                <div class="perspective-layer">
+                    <div class="layer-content">
+                        <div class="layer-header">
+                            <span class="window-dot red"></span>
+                            <span class="window-dot yellow"></span>
+                            <span class="window-dot green"></span>
+                            <span class="layer-title">Weekly Tasks</span>
+                        </div>
+                        <div class="mindmap-viz">
+                            <div class="node" style="top: 25%; left: 15%;">Monday</div>
+                            <div class="node" style="top: 25%; left: 65%;">Review</div>
+                            <div class="node center" style="top: 45%; left: 40%;">This Week</div>
+                            <div class="node accent" style="top: 65%; left: 25%;">Priority</div>
+                            <div class="node" style="top: 65%; left: 60%;">Complete</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layer 1 - Front (focused) -->
+                <div class="perspective-layer">
+                    <div class="layer-content">
+                        <div class="layer-header">
+                            <span class="window-dot red"></span>
+                            <span class="window-dot yellow"></span>
+                            <span class="window-dot green"></span>
+                            <span class="layer-title">Product Launch</span>
+                        </div>
+                        <div class="mindmap-viz">
+                            <div class="node" style="top: 15%; left: 35%;">Design</div>
+                            <div class="node" style="top: 15%; left: 55%;">Development</div>
+                            <div class="node accent" style="top: 35%; left: 18%;">UI/UX</div>
+                            <div class="node center" style="top: 45%; left: 42%;">Launch</div>
+                            <div class="node accent" style="top: 35%; left: 70%;">Backend</div>
+                            <div class="node" style="top: 65%; left: 25%;">Testing</div>
+                            <div class="node" style="top: 65%; left: 50%;">Deploy</div>
+                            <div class="node" style="top: 75%; left: 68%;">Monitor</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layer indicators -->
+                <div class="layer-indicators">
+                    <div class="layer-dot"></div>
+                    <div class="layer-dot"></div>
+                    <div class="layer-dot active"></div>
                 </div>
             </div>
         </div>
@@ -849,7 +1032,7 @@
         }, observerOptions);
 
         // Observe elements
-        document.querySelectorAll('.screenshot-wrapper, .features-header h2, .feature, .download-header h2, .download-header p, .download-btn, .download-note').forEach(el => {
+        document.querySelectorAll('.perspective-stack, .features-header h2, .feature, .download-header h2, .download-header p, .download-btn, .download-note').forEach(el => {
             observer.observe(el);
         });
     </script>
