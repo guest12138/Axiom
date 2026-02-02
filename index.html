@@ -252,14 +252,14 @@
         }
 
         .btn-primary {
-            background: var(--text);
+            background: #007AFF;
             color: white;
         }
 
         .btn-primary:hover {
-            background: var(--accent);
+            background: #0066DD;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.25);
         }
 
         .btn-secondary {
@@ -381,23 +381,30 @@
             /* 去掉蓝色边框，保持普通白色节点样式 */
         }
 
-        /* 高亮效果：悬浮时其他图层虚化 */
-        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node {
+        /* 高亮效果：悬浮时其他图层普通节点虚化 */
+        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node:not(.center) {
             opacity: 0.15;
             filter: blur(2px);
             transition: opacity 0.3s ease, filter 0.3s ease;
         }
 
-        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .folder-connections-svg {
-            opacity: 0.1;
-            transition: opacity 0.3s ease;
-        }
-
-        /* 高亮的节点保持清晰 */
-        .demo-node.highlighted {
+        /* 背后图层的中心节点保持高亮（程序里的 perspective-highlighted 效果） */
+        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .demo-node.center {
             opacity: 1 !important;
             filter: none !important;
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .perspective-container.highlight-mode .perspective-folder-layer:not(.focused) .folder-connections-svg {
+            opacity: 0.15;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 当前悬浮的节点高亮 */
+        .demo-node.highlighted {
+            opacity: 1 !important;
+            filter: none !important;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 6px 24px rgba(0, 0, 0, 0.4) !important;
             z-index: 10;
         }
 
@@ -902,18 +909,18 @@
                             </div>
                         </div>
 
-                        <!-- Layer 2 - Project Ideas - 右下偏向 -->
+                        <!-- Layer 2 - Project Ideas - 右下偏向（更靠右下） -->
                         <div class="perspective-folder-layer" data-index="2">
                             <div class="folder-canvas-area">
                                 <svg class="folder-connections-svg"></svg>
                                 <div class="folder-nodes-container">
-                                    <div class="demo-node center" data-id="2-root" style="top: 58%; left: 20%;">Ideas</div>
-                                    <div class="demo-node" data-id="2-1" data-parent="2-root" style="top: 35%; left: 45%;">Research</div>
-                                    <div class="demo-node accent" data-id="2-2" data-parent="2-root" style="top: 75%; left: 42%;">Brainstorm</div>
-                                    <div class="demo-node" data-id="2-1-1" data-parent="2-1" style="top: 25%; left: 68%;">Market</div>
-                                    <div class="demo-node" data-id="2-1-2" data-parent="2-1" style="top: 42%; left: 70%;">Trends</div>
-                                    <div class="demo-node" data-id="2-2-1" data-parent="2-2" style="top: 65%; left: 65%;">Features</div>
-                                    <div class="demo-node" data-id="2-2-2" data-parent="2-2" style="top: 82%; left: 68%;">MVP</div>
+                                    <div class="demo-node center" data-id="2-root" style="top: 65%; left: 28%;">Ideas</div>
+                                    <div class="demo-node" data-id="2-1" data-parent="2-root" style="top: 45%; left: 52%;">Research</div>
+                                    <div class="demo-node" data-id="2-2" data-parent="2-root" style="top: 80%; left: 50%;">Brainstorm</div>
+                                    <div class="demo-node" data-id="2-1-1" data-parent="2-1" style="top: 35%; left: 75%;">Market</div>
+                                    <div class="demo-node" data-id="2-1-2" data-parent="2-1" style="top: 52%; left: 78%;">Trends</div>
+                                    <div class="demo-node" data-id="2-2-1" data-parent="2-2" style="top: 72%; left: 73%;">Features</div>
+                                    <div class="demo-node" data-id="2-2-2" data-parent="2-2" style="top: 88%; left: 76%;">MVP</div>
                                 </div>
                             </div>
                         </div>
