@@ -19,7 +19,6 @@
             --text-muted: rgba(0, 0, 0, 0.35);
             --border: rgba(0, 0, 0, 0.08);
             --accent: #007AFF;
-            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         html {
@@ -41,22 +40,23 @@
             padding: 0 40px;
         }
 
-        /* Animation Classes */
-        .reveal-text {
+        /* Cursor follower */
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0,122,255,0.03) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1.2s var(--ease-out-expo), transform 1.2s var(--ease-out-expo);
         }
 
-        .reveal-text.visible {
+        body:hover .cursor-glow {
             opacity: 1;
-            transform: translateY(0);
         }
-
-        .delay-100 { transition-delay: 0.1s; }
-        .delay-200 { transition-delay: 0.2s; }
-        .delay-300 { transition-delay: 0.3s; }
-        .delay-400 { transition-delay: 0.4s; }
 
         /* Navigation */
         nav {
@@ -68,11 +68,12 @@
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+            border-bottom: 1px solid var(--border);
+            transform: translateY(0);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        nav.nav-hidden {
+        nav.hidden {
             transform: translateY(-100%);
         }
 
@@ -86,29 +87,29 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
             color: var(--text);
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 400;
             letter-spacing: 0.5px;
-            opacity: 0;
-            animation: fadeIn 0.8s var(--ease-out-expo) forwards;
         }
 
         .logo img {
             width: 28px;
             height: 28px;
             border-radius: 6px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo:hover img {
+            transform: rotate(-10deg) scale(1.1);
         }
 
         .nav-links {
             display: flex;
             align-items: center;
             gap: 40px;
-            opacity: 0;
-            animation: fadeIn 0.8s var(--ease-out-expo) 0.2s forwards;
         }
 
         .nav-links a {
@@ -129,7 +130,7 @@
             width: 0;
             height: 1px;
             background: var(--text);
-            transition: width 0.3s var(--ease-out-expo);
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .nav-links a:hover {
@@ -142,125 +143,137 @@
 
         /* Hero */
         .hero {
-            padding: 220px 0 140px;
+            padding: 200px 0 120px;
             text-align: center;
             position: relative;
         }
 
         .hero-label {
-            display: inline-block;
             font-size: 11px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 30px;
-            padding: 6px 12px;
-            background: rgba(0, 122, 255, 0.06);
-            border-radius: 100px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
         }
 
         h1 {
-            font-size: 72px;
+            font-size: 64px;
             font-weight: 300;
-            letter-spacing: -2px;
+            letter-spacing: -1px;
             margin-bottom: 24px;
-            background: linear-gradient(180deg, #000 0%, #333 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            overflow: hidden;
         }
 
+        .title-word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+            animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .title-word:nth-child(1) { animation-delay: 0.3s; }
+        .title-word:nth-child(2) { animation-delay: 0.4s; }
+        .title-word:nth-child(3) { animation-delay: 0.5s; }
+
         .hero p {
-            font-size: 18px;
+            font-size: 16px;
             color: var(--text-light);
             font-weight: 300;
-            max-width: 480px;
+            max-width: 400px;
             margin: 0 auto 60px;
-            line-height: 1.6;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
         }
 
         .cta-group {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
+            opacity: 0;
+            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
         }
 
         .btn {
             position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 36px;
-            font-size: 12px;
-            font-weight: 500;
+            display: inline-block;
+            padding: 14px 32px;
+            font-size: 11px;
+            font-weight: 400;
             letter-spacing: 1px;
             text-transform: uppercase;
             text-decoration: none;
-            transition: all 0.4s var(--ease-out-expo);
             cursor: pointer;
-            border-radius: 100px;
+            border: none;
             overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: translateX(-100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
         }
 
         .btn-primary {
             background: var(--text);
             color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .btn-secondary {
-            background: white;
+            background: transparent;
             color: var(--text);
             border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
             border-color: var(--text);
-            background: #FAFAFA;
         }
 
         /* Screenshot */
         .screenshot-section {
             padding: 0 0 160px;
-            perspective: 2000px;
-        }
-
-        .screenshot-container {
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
         }
 
         .screenshot-wrapper {
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 12px;
+            position: relative;
+            border: 1px solid var(--border);
             overflow: hidden;
-            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.15);
-            background: #fff;
-            transform: rotateX(5deg);
-            transition: transform 1.2s var(--ease-out-expo), box-shadow 1.2s var(--ease-out-expo);
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            animation: fadeScale 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards;
         }
 
-        .screenshot-wrapper.visible {
-            transform: rotateX(0deg);
-        }
-
-        .screenshot-wrapper:hover {
-            box-shadow: 0 60px 120px -30px rgba(0,0,0,0.2);
-        }
-
-        .screenshot-wrapper img {
-            width: 100%;
-            display: block;
+        .screenshot-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 3s ease-in-out 2s infinite;
         }
 
         .screenshot-placeholder {
             aspect-ratio: 16/10;
-            background: #fcfcfc;
+            background: #FAFAFA;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -268,24 +281,22 @@
             font-size: 12px;
             letter-spacing: 1px;
             text-transform: uppercase;
-            background-image: radial-gradient(#e5e5e5 1px, transparent 1px);
-            background-size: 20px 20px;
         }
 
         /* Features */
         .features {
-            padding: 160px 0;
+            padding: 120px 0;
             border-top: 1px solid var(--border);
         }
 
         .features-header {
             text-align: center;
-            margin-bottom: 100px;
+            margin-bottom: 80px;
         }
 
         .features-header h2 {
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 400;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--text-muted);
@@ -294,14 +305,14 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 80px 40px;
+            gap: 60px 40px;
         }
 
         .feature {
             text-align: center;
             opacity: 0;
             transform: translateY(30px);
-            transition: all 1s var(--ease-out-expo);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .feature.visible {
@@ -309,124 +320,150 @@
             transform: translateY(0);
         }
 
-        .feature:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.03);
-            font-size: 20px;
-            transition: transform 0.4s var(--ease-out-expo);
-        }
-
-        .feature:hover .feature-icon {
-            transform: scale(1.1) rotate(5deg);
-            background: rgba(0,122,255,0.1);
-            color: var(--accent);
-        }
-
         .feature h3 {
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 400;
             margin-bottom: 12px;
-            letter-spacing: -0.3px;
+            letter-spacing: 0.3px;
+            transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .feature:hover h3 {
+            letter-spacing: 2px;
         }
 
         .feature p {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-light);
             font-weight: 300;
-            line-height: 1.6;
-            max-width: 260px;
-            margin: 0 auto;
+            line-height: 1.7;
         }
 
         /* Download */
         .download {
-            padding: 160px 0;
-            background: #FAFAFA;
+            padding: 120px 0;
             border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
         }
 
         .download-header {
             text-align: center;
-            margin-bottom: 80px;
+            margin-bottom: 60px;
         }
 
         .download-header h2 {
-            font-size: 42px;
+            font-size: 32px;
             font-weight: 300;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .download-header p {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 300;
         }
 
         .download-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 800px;
+            gap: 20px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
         .download-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            background: white;
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 16px;
+            position: relative;
+            display: block;
+            padding: 24px 20px;
+            border: 1px solid var(--border);
             text-decoration: none;
             color: var(--text);
             text-align: center;
-            transition: all 0.4s var(--ease-out-expo);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--text);
+            transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 0;
+        }
+
+        .download-btn:hover::before {
+            height: 100%;
         }
 
         .download-btn:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            border-color: rgba(0,0,0,0.1);
+            border-color: var(--text);
+            color: white;
         }
 
-        .os-icon {
-            font-size: 24px;
-            margin-bottom: 20px;
-            opacity: 0.5;
-            transition: opacity 0.3s;
-        }
-
-        .download-btn:hover .os-icon {
-            opacity: 1;
-            color: var(--accent);
+        .download-btn span {
+            position: relative;
+            z-index: 1;
         }
 
         .download-btn-label {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 6px;
         }
 
         .download-btn-size {
             font-size: 11px;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .download-btn:hover .download-btn-size {
+            opacity: 0.8;
+        }
+
+        .download-note {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
             color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* Marquee */
+        .marquee-section {
+            padding: 80px 0;
+            border-top: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .marquee {
+            display: flex;
+            animation: marquee 20s linear infinite;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 80px;
+            padding-right: 80px;
+            white-space: nowrap;
+        }
+
+        .marquee-item {
+            font-size: 11px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--text-muted);
         }
 
         /* Footer */
         footer {
-            padding: 60px 0;
-            background: white;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
         }
 
         footer .container {
@@ -436,44 +473,112 @@
         }
 
         footer p {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
+            letter-spacing: 0.3px;
         }
 
         .footer-links {
             display: flex;
-            gap: 40px;
+            gap: 30px;
         }
 
         .footer-links a {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             text-decoration: none;
-            transition: color 0.2s;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            transition: color 0.3s, letter-spacing 0.3s;
         }
 
         .footer-links a:hover {
             color: var(--text);
+            letter-spacing: 1px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeScale {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         /* Mobile */
         @media (max-width: 768px) {
-            .container { padding: 0 24px; }
-            .nav-links { display: none; }
-            h1 { font-size: 42px; }
-            .features-grid { grid-template-columns: 1fr; gap: 60px; }
-            .download-grid { grid-template-columns: 1fr; }
-            footer .container { flex-direction: column; gap: 24px; }
+            .container {
+                padding: 0 24px;
+            }
+
+            .cursor-glow {
+                display: none;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 140px 0 80px;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .marquee-section {
+                display: none;
+            }
+
+            footer .container {
+                flex-direction: column;
+                gap: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <nav id="navbar">
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <nav id="nav">
         <div class="container">
             <a href="/" class="logo">
                 <img src="icon.png" alt="Axiom">
@@ -489,21 +594,23 @@
 
     <section class="hero">
         <div class="container">
-            <div class="reveal-text">
-                <span class="hero-label">Open Source</span>
-            </div>
-            <h1 class="reveal-text delay-100">Think in Structure</h1>
-            <p class="reveal-text delay-200">A minimal mind mapping and task management app.<br>Offline-first, blazing fast, beautifully simple.</p>
-            <div class="cta-group reveal-text delay-300">
-                <a href="#download" class="btn btn-primary">Download Free</a>
+            <p class="hero-label">Open Source</p>
+            <h1>
+                <span class="title-word">Think</span>
+                <span class="title-word">in</span>
+                <span class="title-word">Structure</span>
+            </h1>
+            <p>A minimal mind mapping and task management app. Offline-first, blazing fast.</p>
+            <div class="cta-group">
+                <a href="#download" class="btn btn-primary">Download</a>
                 <a href="https://github.com/guest12138/Axiom" class="btn btn-secondary" target="_blank">View Source</a>
             </div>
         </div>
     </section>
 
     <section class="screenshot-section">
-        <div class="container screenshot-container" id="tilt-container">
-            <div class="screenshot-wrapper reveal-text delay-400">
+        <div class="container">
+            <div class="screenshot-wrapper">
                 <div class="screenshot-placeholder">
                     App Screenshot
                 </div>
@@ -514,36 +621,30 @@
     <section class="features" id="features">
         <div class="container">
             <div class="features-header">
-                <h2 class="reveal-on-scroll">Design & Performance</h2>
+                <h2>Features</h2>
             </div>
             <div class="features-grid">
-                <div class="feature reveal-on-scroll">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Blazing Fast</h3>
-                    <p>Native performance with smooth 60fps interactions.</p>
-                </div>
-                <div class="feature reveal-on-scroll delay-100">
-                    <div class="feature-icon">📴</div>
+                <div class="feature">
                     <h3>Offline First</h3>
                     <p>Your data stays on your device. Works perfectly without internet.</p>
                 </div>
-                <div class="feature reveal-on-scroll delay-200">
-                    <div class="feature-icon">🎯</div>
+                <div class="feature">
+                    <h3>Blazing Fast</h3>
+                    <p>Native performance with smooth 60fps interactions.</p>
+                </div>
+                <div class="feature">
                     <h3>Mind Map + Tasks</h3>
                     <p>Visualize ideas as mind maps, convert to actionable tasks.</p>
                 </div>
-                <div class="feature reveal-on-scroll">
-                    <div class="feature-icon">🌍</div>
+                <div class="feature">
                     <h3>Cross Platform</h3>
                     <p>Available on macOS, Windows, and Linux.</p>
                 </div>
-                <div class="feature reveal-on-scroll delay-100">
-                    <div class="feature-icon">🔓</div>
+                <div class="feature">
                     <h3>Open Source</h3>
                     <p>Fully open source under MIT license.</p>
                 </div>
-                <div class="feature reveal-on-scroll delay-200">
-                    <div class="feature-icon">🎨</div>
+                <div class="feature">
                     <h3>Minimal Design</h3>
                     <p>Clean, distraction-free interface.</p>
                 </div>
@@ -551,29 +652,48 @@
         </div>
     </section>
 
+    <section class="marquee-section">
+        <div class="marquee">
+            <div class="marquee-content">
+                <span class="marquee-item">Mind Mapping</span>
+                <span class="marquee-item">Task Management</span>
+                <span class="marquee-item">Offline First</span>
+                <span class="marquee-item">Open Source</span>
+                <span class="marquee-item">Cross Platform</span>
+                <span class="marquee-item">Blazing Fast</span>
+            </div>
+            <div class="marquee-content">
+                <span class="marquee-item">Mind Mapping</span>
+                <span class="marquee-item">Task Management</span>
+                <span class="marquee-item">Offline First</span>
+                <span class="marquee-item">Open Source</span>
+                <span class="marquee-item">Cross Platform</span>
+                <span class="marquee-item">Blazing Fast</span>
+            </div>
+        </div>
+    </section>
+
     <section class="download" id="download">
         <div class="container">
             <div class="download-header">
-                <h2 class="reveal-on-scroll">Start Thinking Clearly</h2>
-                <p class="reveal-on-scroll delay-100">Free forever. No account required.</p>
+                <h2>Download</h2>
+                <p>Free and open source. No account required.</p>
             </div>
             <div class="download-grid">
-                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom-1.0.17-arm64.dmg" class="download-btn reveal-on-scroll">
-                    <div class="os-icon"></div>
+                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom-1.0.17-arm64.dmg" class="download-btn">
                     <span class="download-btn-label">macOS</span>
                     <span class="download-btn-size">Apple Silicon</span>
                 </a>
-                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom.Setup.1.0.17.exe" class="download-btn reveal-on-scroll delay-100">
-                    <div class="os-icon">❖</div>
+                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom.Setup.1.0.17.exe" class="download-btn">
                     <span class="download-btn-label">Windows</span>
                     <span class="download-btn-size">64-bit</span>
                 </a>
-                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom-1.0.17-arm64.AppImage" class="download-btn reveal-on-scroll delay-200">
-                    <div class="os-icon">🐧</div>
+                <a href="https://github.com/guest12138/Axiom/releases/latest/download/Axiom-1.0.17-arm64.AppImage" class="download-btn">
                     <span class="download-btn-label">Linux</span>
                     <span class="download-btn-size">AppImage</span>
                 </a>
             </div>
+            <p class="download-note">macOS users: Right-click and select "Open" on first launch.</p>
         </div>
     </section>
 
@@ -588,62 +708,39 @@
     </footer>
 
     <script>
-        // Reveal animations on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal-text, .reveal-on-scroll, .screenshot-wrapper').forEach(el => {
-            observer.observe(el);
+        // Cursor glow effect
+        const glow = document.getElementById('cursor-glow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
         });
 
-        // 3D Tilt Effect for Screenshot
-        const container = document.getElementById('tilt-container');
-        const wrapper = container.querySelector('.screenshot-wrapper');
-        
-        container.addEventListener('mousemove', (e) => {
-            const rect = container.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const xPct = x / rect.width;
-            const yPct = y / rect.height;
-            
-            const rotateX = (0.5 - yPct) * 10;
-            const rotateY = (xPct - 0.5) * 10;
-            
-            wrapper.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-
-        container.addEventListener('mouseleave', () => {
-            wrapper.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-        });
-
-        // Smart Navbar
+        // Nav hide on scroll
         let lastScroll = 0;
-        const navbar = document.getElementById('navbar');
-        
+        const nav = document.getElementById('nav');
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
-            
             if (currentScroll > lastScroll && currentScroll > 100) {
-                navbar.classList.add('nav-hidden');
+                nav.classList.add('hidden');
             } else {
-                navbar.classList.remove('nav-hidden');
+                nav.classList.remove('hidden');
             }
-            
             lastScroll = currentScroll;
         });
+
+        // Reveal features on scroll
+        const features = document.querySelectorAll('.feature');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        features.forEach(feature => observer.observe(feature));
     </script>
 </body>
 </html>
