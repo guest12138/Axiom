@@ -273,243 +273,195 @@
             transform: translateY(-2px);
         }
 
-        /* Perspective Stack Section */
+        /* ===== 透视模式 - 沉浸式文件箱 ===== */
         .perspective-section {
-            height: 320vh; /* 3 screens + breathing room */
-            position: relative;
+            padding: 0 0 160px;
         }
 
-        .perspective-sticky {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 900px;
+        .perspective-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: radial-gradient(circle at 50% 30%, #555c69 0%, #2b303b 100%);
+            border-radius: 8px;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(60px) scale(0.95);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .perspective-container.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .perspective-stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            /* 不居中，让内容完全填满 */
         }
 
         .perspective-stack {
-            position: relative;
-            width: 88%;
-            max-width: 920px;
-            height: 72vh;
-            max-height: 560px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* 全屏填满 */
+            width: 100%; 
+            height: 100%;
             transform-style: preserve-3d;
-            transform: rotateX(7deg);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .perspective-sticky:hover .perspective-stack {
-            transform: rotateX(5deg);
+        /* 每一层文件夹/导图卡片 - 全屏 */
+        .perspective-folder-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* 全屏填满 */
+            width: 100%;
+            height: 100%;
+            /* 半透明玻璃质感 */
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(6px);
+            border: none;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.2);
+            transform-origin: center center;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        .perspective-layer {
+        /* 焦点图层高亮 - Zara 极简风格 */
+        .perspective-folder-layer.focused {
+            box-shadow: 
+                inset 0 0 0 0.5px rgba(255, 255, 255, 0.15),
+                0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        /* 导图内容区域 - 使用相对定位容纳绝对定位的节点 */
+        .folder-canvas-area {
+            flex: 1;
+            position: relative;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        /* 节点容器 - 和正常导图一样的定位方式 */
+        .folder-nodes-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* Glassmorphism to see behind layers */
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: blur(18px) saturate(160%);
-            -webkit-backdrop-filter: blur(18px) saturate(160%);
-            border: 1px solid rgba(0,0,0,0.06);
-            overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-origin: center bottom;
-            backface-visibility: hidden;
         }
 
-        /* Default state - all stacked behind */
-        .perspective-layer[data-state="behind"] {
-            transform: translateY(-70px) translateZ(-160px) scale(0.92);
-            opacity: 0.75;
-            filter: blur(0.5px) brightness(0.99);
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.04);
-        }
-
-        .perspective-layer[data-state="behind-2"] {
-            transform: translateY(-140px) translateZ(-320px) scale(0.84);
-            opacity: 0.55;
-            filter: blur(1.2px) brightness(0.97);
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.03);
-        }
-
-        /* Focused layer */
-        .perspective-layer[data-state="focus"] {
-            transform: translateY(0) translateZ(0) scale(1);
-            opacity: 1;
-            z-index: 10;
-            box-shadow:
-                0 30px 100px rgba(0,0,0,0.12),
-                0 0 0 1px rgba(0,0,0,0.02);
-        }
-
-        /* Already viewed - slide up and fade out */
-        .perspective-layer[data-state="passed"] {
-            transform: translateY(-140%) translateZ(80px) scale(1.02);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Layer content */
-        .layer-content {
-            width: 100%;
-            height: 100%;
-            padding: 28px;
-            display: flex;
-            flex-direction: column;
-            background: transparent;
-        }
-
-        /* Fake window header */
-        .layer-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 24px;
-        }
-
-        .window-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .window-dot.red { background: #FF5F57; }
-        .window-dot.yellow { background: #FFBD2E; }
-        .window-dot.green { background: #28CA41; }
-
-        .layer-title {
-            margin-left: 16px;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            color: var(--text-light);
-            font-weight: 400;
-        }
-
-        /* Mind map visualization */
-        .mindmap-viz {
-            flex: 1;
-            position: relative;
-        }
-
-        .node {
+        /* 模拟节点样式 */
+        .demo-node {
             position: absolute;
             background: white;
-            border: 1px solid var(--border);
-            padding: 12px 20px;
+            padding: 10px 18px;
+            border-radius: 4px;
             font-size: 13px;
-            color: var(--text);
+            font-weight: 400;
+            color: #1a1a1a;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             white-space: nowrap;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .node:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-        }
-
-        .node.center {
-            background: var(--text);
+        .demo-node.center {
+            background: #1a1a1a;
             color: white;
-            border-color: var(--text);
             font-weight: 500;
-            z-index: 10;
         }
 
-        .node.accent {
-            border-color: var(--accent);
+        .demo-node.accent {
+            border: 1px solid var(--accent);
             color: var(--accent);
         }
 
-        /* SVG connections */
-        .connections-svg {
+        /* 透视模式下的连接线 */
+        .folder-connections-svg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
+            overflow: visible;
         }
 
-        .connections-svg line {
-            stroke: rgba(0,0,0,0.1);
+        .folder-connections-svg line {
+            stroke: rgba(255, 255, 255, 0.3);
             stroke-width: 1;
         }
 
-        /* Layer indicators */
-        .layer-indicators {
-            position: fixed;
-            right: 40px;
+        /* 图层指示器（右侧） */
+        .perspective-indicators {
+            position: absolute;
+            right: 30px;
             top: 50%;
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            z-index: 100;
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            gap: 8px;
+            z-index: 2000;
         }
 
-        .layer-indicators.visible {
-            opacity: 1;
-        }
-
-        .layer-dot {
-            width: 8px;
-            height: 8px;
+        .layer-indicator {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: rgba(0,0,0,0.15);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .layer-dot:hover {
-            background: rgba(0,0,0,0.3);
+        .layer-indicator:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.2);
         }
 
-        .layer-dot.active {
-            background: var(--text);
-            transform: scale(1.4);
+        .layer-indicator.active {
+            background: white;
+            border-color: white;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
-        /* Scroll hint */
+        /* 滚动提示 */
         .scroll-hint {
-            position: fixed;
-            bottom: 40px;
+            position: absolute;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.5s ease;
             z-index: 100;
         }
 
-        .scroll-hint.visible {
-            opacity: 1;
+        .scroll-hint.hidden {
+            opacity: 0;
         }
 
         .scroll-hint span {
             font-size: 11px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--text-muted);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .scroll-hint-arrow {
-            width: 20px;
-            height: 20px;
-            border-right: 1px solid var(--text-muted);
-            border-bottom: 1px solid var(--text-muted);
+            width: 16px;
+            height: 16px;
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
             transform: rotate(45deg);
             animation: scrollBounce 2s ease-in-out infinite;
         }
@@ -818,6 +770,10 @@
             .hero { padding: 160px 0 80px; }
             h1 { font-size: 42px; letter-spacing: -1px; }
             
+            .perspective-container { height: 350px; }
+            .perspective-indicators { right: 15px; }
+            .layer-indicator { width: 8px; height: 8px; }
+            
             .features-grid {
                 grid-template-columns: 1fr;
                 gap: 50px;
@@ -868,82 +824,85 @@
         </div>
     </section>
 
-    <section class="perspective-section" id="perspective">
-        <div class="perspective-sticky">
-            <div class="perspective-stack">
-                <!-- Layer 1 - First (starts focused) -->
-                <div class="perspective-layer" data-index="0" data-state="focus">
-                    <div class="layer-content">
-                        <div class="layer-header">
-                            <span class="window-dot red"></span>
-                            <span class="window-dot yellow"></span>
-                            <span class="window-dot green"></span>
-                            <span class="layer-title">Product Launch</span>
+    <section class="perspective-section">
+        <div class="container">
+            <div class="perspective-container" id="perspective-container">
+                <div class="perspective-stage">
+                    <div class="perspective-stack">
+                        <!-- Layer 0 - Product Launch -->
+                        <div class="perspective-folder-layer" data-index="0">
+                            <div class="folder-canvas-area">
+                                <svg class="folder-connections-svg">
+                                    <line x1="50%" y1="45%" x2="30%" y2="25%"/>
+                                    <line x1="50%" y1="45%" x2="70%" y2="25%"/>
+                                    <line x1="50%" y1="45%" x2="20%" y2="55%"/>
+                                    <line x1="50%" y1="45%" x2="80%" y2="55%"/>
+                                    <line x1="50%" y1="45%" x2="35%" y2="75%"/>
+                                    <line x1="50%" y1="45%" x2="65%" y2="75%"/>
+                                </svg>
+                                <div class="folder-nodes-container">
+                                    <div class="demo-node" style="top: 18%; left: 25%;">Design</div>
+                                    <div class="demo-node" style="top: 18%; left: 62%;">Development</div>
+                                    <div class="demo-node accent" style="top: 40%; left: 12%;">UI/UX</div>
+                                    <div class="demo-node center" style="top: 40%; left: 42%;">Launch</div>
+                                    <div class="demo-node accent" style="top: 40%; left: 72%;">Backend</div>
+                                    <div class="demo-node" style="top: 68%; left: 28%;">Testing</div>
+                                    <div class="demo-node" style="top: 68%; left: 58%;">Deploy</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mindmap-viz">
-                            <svg class="connections-svg"></svg>
-                            <div class="node" style="top: 12%; left: 38%;">Design</div>
-                            <div class="node" style="top: 12%; left: 55%;">Development</div>
-                            <div class="node accent" style="top: 32%; left: 15%;">UI/UX</div>
-                            <div class="node center" style="top: 42%; left: 42%;">Launch</div>
-                            <div class="node accent" style="top: 32%; left: 72%;">Backend</div>
-                            <div class="node" style="top: 62%; left: 22%;">Testing</div>
-                            <div class="node" style="top: 62%; left: 48%;">Deploy</div>
-                            <div class="node" style="top: 72%; left: 70%;">Monitor</div>
+
+                        <!-- Layer 1 - Weekly Planning -->
+                        <div class="perspective-folder-layer" data-index="1">
+                            <div class="folder-canvas-area">
+                                <svg class="folder-connections-svg">
+                                    <line x1="50%" y1="45%" x2="25%" y2="22%"/>
+                                    <line x1="50%" y1="45%" x2="75%" y2="22%"/>
+                                    <line x1="50%" y1="45%" x2="30%" y2="70%"/>
+                                    <line x1="50%" y1="45%" x2="70%" y2="70%"/>
+                                </svg>
+                                <div class="folder-nodes-container">
+                                    <div class="demo-node" style="top: 15%; left: 18%;">Monday</div>
+                                    <div class="demo-node" style="top: 15%; left: 68%;">Review</div>
+                                    <div class="demo-node center" style="top: 40%; left: 40%;">This Week</div>
+                                    <div class="demo-node accent" style="top: 65%; left: 22%;">Priority</div>
+                                    <div class="demo-node" style="top: 65%; left: 60%;">Complete</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Layer 2 - Project Ideas -->
+                        <div class="perspective-folder-layer" data-index="2">
+                            <div class="folder-canvas-area">
+                                <svg class="folder-connections-svg">
+                                    <line x1="50%" y1="45%" x2="22%" y2="28%"/>
+                                    <line x1="50%" y1="45%" x2="72%" y2="28%"/>
+                                    <line x1="50%" y1="45%" x2="50%" y2="72%"/>
+                                </svg>
+                                <div class="folder-nodes-container">
+                                    <div class="demo-node" style="top: 20%; left: 15%;">Research</div>
+                                    <div class="demo-node center" style="top: 40%; left: 42%;">Ideas</div>
+                                    <div class="demo-node" style="top: 20%; left: 65%;">Explore</div>
+                                    <div class="demo-node accent" style="top: 65%; left: 42%;">Brainstorm</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Layer 2 - Second (behind) -->
-                <div class="perspective-layer" data-index="1" data-state="behind">
-                    <div class="layer-content">
-                        <div class="layer-header">
-                            <span class="window-dot red"></span>
-                            <span class="window-dot yellow"></span>
-                            <span class="window-dot green"></span>
-                            <span class="layer-title">Weekly Planning</span>
-                        </div>
-                        <div class="mindmap-viz">
-                            <div class="node" style="top: 18%; left: 12%;">Monday</div>
-                            <div class="node" style="top: 18%; left: 68%;">Review</div>
-                            <div class="node center" style="top: 40%; left: 40%;">This Week</div>
-                            <div class="node accent" style="top: 62%; left: 20%;">Priority</div>
-                            <div class="node" style="top: 62%; left: 58%;">Complete</div>
-                        </div>
-                    </div>
+
+                <!-- 图层指示器（右侧） -->
+                <div class="perspective-indicators">
+                    <div class="layer-indicator active" data-index="0"></div>
+                    <div class="layer-indicator" data-index="1"></div>
+                    <div class="layer-indicator" data-index="2"></div>
                 </div>
-                
-                <!-- Layer 3 - Third (further behind) -->
-                <div class="perspective-layer" data-index="2" data-state="behind-2">
-                    <div class="layer-content">
-                        <div class="layer-header">
-                            <span class="window-dot red"></span>
-                            <span class="window-dot yellow"></span>
-                            <span class="window-dot green"></span>
-                            <span class="layer-title">Project Ideas</span>
-                        </div>
-                        <div class="mindmap-viz">
-                            <div class="node" style="top: 25%; left: 18%;">Research</div>
-                            <div class="node center" style="top: 42%; left: 42%;">Ideas</div>
-                            <div class="node" style="top: 25%; left: 68%;">Explore</div>
-                            <div class="node accent" style="top: 60%; left: 40%;">Brainstorm</div>
-                        </div>
-                    </div>
+
+                <!-- 滚动提示 -->
+                <div class="scroll-hint" id="scroll-hint">
+                    <span>Scroll to explore</span>
+                    <div class="scroll-hint-arrow"></div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Layer indicators (fixed) -->
-        <div class="layer-indicators" id="layer-indicators">
-            <div class="layer-dot active" data-target="0"></div>
-            <div class="layer-dot" data-target="1"></div>
-            <div class="layer-dot" data-target="2"></div>
-        </div>
-        
-        <!-- Scroll hint -->
-        <div class="scroll-hint" id="scroll-hint">
-            <span>Scroll to explore</span>
-            <div class="scroll-hint-arrow"></div>
         </div>
     </section>
 
@@ -1078,58 +1037,9 @@
         let lastScroll = 0;
         const nav = document.querySelector('nav');
 
-        // Perspective scroll effect
-        const perspectiveSection = document.getElementById('perspective');
-        const layers = document.querySelectorAll('.perspective-layer');
-        const indicators = document.getElementById('layer-indicators');
-        const indicatorDots = document.querySelectorAll('.layer-dot');
-        const scrollHint = document.getElementById('scroll-hint');
-        const totalLayers = layers.length;
-
-        function updatePerspectiveLayers() {
-            if (!perspectiveSection) return;
-            
-            const rect = perspectiveSection.getBoundingClientRect();
-            const sectionTop = -rect.top;
-            const sectionHeight = perspectiveSection.offsetHeight - window.innerHeight;
-            const progress = Math.max(0, Math.min(1, sectionTop / sectionHeight));
-            
-            // Calculate which layer should be focused
-            const layerProgress = progress * totalLayers;
-            const currentLayer = Math.min(Math.floor(layerProgress), totalLayers - 1);
-            
-            // Show/hide indicators and scroll hint
-            const inSection = rect.top <= 0 && rect.bottom >= window.innerHeight;
-            indicators.classList.toggle('visible', inSection);
-            scrollHint.classList.toggle('visible', inSection && progress < 0.1);
-            
-            // Update each layer's state
-            layers.forEach((layer, index) => {
-                if (index < currentLayer) {
-                    // Already passed - slide up and out
-                    layer.dataset.state = 'passed';
-                } else if (index === currentLayer) {
-                    // Currently focused
-                    layer.dataset.state = 'focus';
-                } else if (index === currentLayer + 1) {
-                    // Next layer - behind
-                    layer.dataset.state = 'behind';
-                } else {
-                    // Further back
-                    layer.dataset.state = 'behind-2';
-                }
-            });
-            
-            // Update indicator dots
-            indicatorDots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentLayer);
-            });
-        }
-
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
             
-            // Nav effects
             if (currentScroll > 100) {
                 nav.classList.add('scrolled');
             } else {
@@ -1142,26 +1052,130 @@
                 nav.classList.remove('hidden');
             }
             lastScroll = currentScroll;
-            
-            // Update perspective layers
-            updatePerspectiveLayers();
         });
 
-        // Indicator dot click
-        indicatorDots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                const target = parseInt(dot.dataset.target);
-                const sectionTop = perspectiveSection.offsetTop;
-                const sectionHeight = perspectiveSection.offsetHeight - window.innerHeight;
-                const scrollTo = sectionTop + (target / totalLayers) * sectionHeight;
-                window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+        // ===== 透视模式 - 逐字还原 base.js updatePerspectiveLayerStyles =====
+        let perspectiveFocusIndex = 0;
+        const perspectiveContainer = document.getElementById('perspective-container');
+        const perspectiveLayers = perspectiveContainer.querySelectorAll('.perspective-folder-layer');
+        const perspectiveIndicators = perspectiveContainer.querySelectorAll('.layer-indicator');
+        const scrollHint = document.getElementById('scroll-hint');
+        const totalLayers = perspectiveLayers.length;
+
+        /**
+         * 更新透视图层样式（根据焦点索引）
+         * 逐字还原自 base.js 第 5816-5876 行
+         */
+        function updatePerspectiveLayerStyles() {
+            const container = document.getElementById('perspective-container');
+            if (!container) return;
+            
+            const layers = container.querySelectorAll('.perspective-folder-layer');
+            const indicators = container.querySelectorAll('.layer-indicator');
+            
+            layers.forEach((layer, index) => {
+                // 计算与焦点的距离（正数 = 在焦点后面，负数 = 在焦点前面）
+                const distance = index - perspectiveFocusIndex;
+                
+                // 样式计算
+                let scale, opacity, blur, yOffset, zIndex;
+                
+                if (distance === 0) {
+                    // 焦点层 - 最清晰
+                    scale = 1;
+                    opacity = 1;
+                    blur = 0;
+                    yOffset = 0;
+                    zIndex = 100;
+                    layer.style.visibility = 'visible';
+                } else if (distance > 0) {
+                    // 在焦点后面（深层）- 可见，向上堆叠
+                    scale = 1 - (distance * 0.015);
+                    opacity = Math.max(0.7, 1 - distance * 0.08);
+                    blur = 0; // 不模糊，保持清晰
+                    yOffset = -distance * 40; // 向上偏移
+                    zIndex = 100 - distance;
+                    layer.style.visibility = 'visible';
+                } else {
+                    // 在焦点前面（浅层，已滑过）- 隐藏
+                    scale = 1;
+                    opacity = 0;
+                    blur = 0;
+                    yOffset = 0;
+                    zIndex = 0;
+                    layer.style.visibility = 'hidden';
+                }
+                
+                layer.style.transform = `translateY(${yOffset}px) scale(${scale})`;
+                layer.style.opacity = opacity;
+                layer.style.filter = `blur(${blur}px)`;
+                layer.style.zIndex = zIndex;
+                
+                // 焦点层添加高亮边框
+                if (distance === 0) {
+                    layer.classList.add('focused');
+                } else {
+                    layer.classList.remove('focused');
+                }
+            });
+            
+            // 更新指示器
+            indicators.forEach((indicator, index) => {
+                if (index === perspectiveFocusIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+
+            // 更新滚动提示
+            if (perspectiveFocusIndex > 0) {
+                scrollHint.classList.add('hidden');
+            } else {
+                scrollHint.classList.remove('hidden');
+            }
+        }
+
+        // 初始化图层样式
+        updatePerspectiveLayerStyles();
+
+        // 透视区域内的滚轮事件
+        let isInPerspective = false;
+
+        perspectiveContainer.addEventListener('mouseenter', () => {
+            isInPerspective = true;
+        });
+
+        perspectiveContainer.addEventListener('mouseleave', () => {
+            isInPerspective = false;
+        });
+
+        perspectiveContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            const delta = e.deltaY;
+            const maxIndex = totalLayers - 1;
+            
+            if (delta > 0) {
+                // 向下滚 → 查看后面的图层
+                perspectiveFocusIndex = Math.min(perspectiveFocusIndex + 1, maxIndex);
+            } else if (delta < 0) {
+                // 向上滚 → 查看前面的图层
+                perspectiveFocusIndex = Math.max(perspectiveFocusIndex - 1, 0);
+            }
+            
+            updatePerspectiveLayerStyles();
+        }, { passive: false });
+
+        // 指示器点击
+        perspectiveIndicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                perspectiveFocusIndex = index;
+                updatePerspectiveLayerStyles();
             });
         });
 
-        // Initial update
-        updatePerspectiveLayers();
-
-        // Intersection Observer for other animations
+        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.2,
             rootMargin: '0px 0px -50px 0px'
@@ -1178,7 +1192,7 @@
         }, observerOptions);
 
         // Observe elements
-        document.querySelectorAll('.features-header h2, .feature, .download-header h2, .download-header p, .download-btn, .download-note').forEach(el => {
+        document.querySelectorAll('.perspective-container, .features-header h2, .feature, .download-header h2, .download-header p, .download-btn, .download-note').forEach(el => {
             observer.observe(el);
         });
     </script>
